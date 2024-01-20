@@ -1,0 +1,15 @@
+### Project Related ###
+philo
+test.txt
+
+/build/
+/dependencies/libft/build
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### IDEA IDE ###
+/.idea/
