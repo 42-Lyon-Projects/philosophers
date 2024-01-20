@@ -6,10 +6,10 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 00:13:59 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/20 02:41:18 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/20 12:08:15 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <limits.h>
 #include <stdio.h>
 #include "philosophers.h"
 
@@ -69,13 +69,13 @@ int arguments_is_valids(const int argc, char **argv)
 	philosophers_number = ft_atoi(argv[1]);
 	if (!ft_is_numbers(argv[1]) || philosophers_number < 1 || philosophers_number > MAX_PHILOSOPHERS)
 		return (printf("Philosophers Numbers must be positive number in range 1 - %d", MAX_PHILOSOPHERS), 0);
-	if (!ft_is_numbers(argv[2]) || ft_atoi(argv[2]) < 1)
+	if (!ft_is_numbers(argv[2]) || ft_atoi(argv[2]) > INT_MAX || ft_atoi(argv[2]) < 1)
 		return (printf("Philosophers time to die must be a positive Number superior of 0 (ms) !"), 0);
-	if (!ft_is_numbers(argv[3]) || ft_atoi(argv[3]) < 1)
+	if (!ft_is_numbers(argv[3]) || ft_atoi(argv[3]) > INT_MAX || ft_atoi(argv[3]) < 1)
 		return (printf("Philosophers time to eat must be a positive Number superior of 0 (ms) !"), 0);
-	if (!ft_is_numbers(argv[4]) || ft_atoi(argv[4]) < 1)
+	if (!ft_is_numbers(argv[4]) || ft_atoi(argv[4]) > INT_MAX || ft_atoi(argv[4]) < 1)
 		return (printf("Philosophers time to sleep must be a positive Number superior of 0 (ms)"), 0);
-	if (argc == 6 && (!ft_is_numbers(argv[4]) || ft_atoi(argv[4]) < 1))
+	if (argc == 6 && (!ft_is_numbers(argv[5]) || ft_atoi(argv[5]) > INT_MAX || ft_atoi(argv[5]) < 1))
 		return (printf("Philosophers number of meals must be a positive Number superior of 0"), 0);
 	return (1);
 }
