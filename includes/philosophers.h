@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:43:17 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/20 06:16:57 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/20 14:34:48 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,13 @@ int		create_threads(t_roundtable *table);
 int		joining_threads(t_roundtable *table);
 
 void	*philosopher_task(void *ptr);
-void	philosopher_eat(t_philosopher *philosopher);
+int	philosopher_eat(t_philosopher *philosopher);
 int		sleep_ms(useconds_t ms);
 
 void	*watchdog_task(void *ptr);
 int		must_exit(t_roundtable *table);
-int		is_dead(t_philosopher *philosopher);
+int		must_kill(t_roundtable *table);
+int		must_stop(t_roundtable *table);
 
 void	destroy_mutexs(char *message, t_roundtable *table);
 
