@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:18 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/21 13:08:57 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 13:54:23 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -23,10 +23,10 @@ static int	kill_philosopher(t_philosopher *philosophers)
 		if (philosopher_must_dead(tmp, \
 			philosophers->table->settings.time_to_die))
 		{
-			print_message("died", tmp);
 			pthread_mutex_lock(&tmp->table->dead_mutex);
 			philosophers->table->has_dead = 1;
 			pthread_mutex_unlock(&tmp->table->dead_mutex);
+			unsecure_print("died", tmp);
 			return (1);
 		}
 		tmp = tmp->next;

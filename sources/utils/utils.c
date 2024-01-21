@@ -6,11 +6,20 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:12:16 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/21 13:10:51 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:34:14 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "philosophers.h"
+
+void	unsecure_print(const char *message, t_philosopher *philosopher)
+{
+	pthread_mutex_lock(&philosopher->table->write_mutex);
+	printf("%u %u %s\n", \
+		time_elapsed_after_start(philosopher->table->start_timestamp), \
+		philosopher->philosopher_id, message);
+	pthread_mutex_unlock(&philosopher->table->write_mutex);
+}
 
 void	print_message(const char *message, t_philosopher *philosopher)
 {

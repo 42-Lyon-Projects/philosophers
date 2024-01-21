@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 11:32:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/21 13:10:25 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 13:37:19 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -46,12 +46,12 @@ useconds_t	get_current_time_in_ms(void)
  * @param ms The duration to sleep in milliseconds.
  * @return 0 on success.
  */
-int	sleep_ms(useconds_t ms)
+int	sleep_ms(useconds_t ms, t_roundtable *table)
 {
 	useconds_t	at_sleep;
 
 	at_sleep = get_current_time_in_ms();
-	while ((get_current_time_in_ms() - at_sleep) < ms)
+	while ((get_current_time_in_ms() - at_sleep) < ms && !must_stop(table))
 		usleep(500);
 	return (0);
 }

@@ -13,9 +13,9 @@ FILES =	main.c								\
 
 BUILD_DIRECTORY = ./build/
 
-CC = cc
+CC = gcc
 
-FLAGS = -Wall -Wextra -Werror -c -g3
+FLAGS = -Wall -Wextra -Werror -c -g
 
 SOURCES = $(addprefix "sources/", $(SRCS:.c=.o))
 OBJS = $(addprefix $(BUILD_DIRECTORY), $(FILES:.c=.o))

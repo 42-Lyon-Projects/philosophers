@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:56:51 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/21 12:59:04 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 16:33:42 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -20,28 +20,27 @@ void	drop_fork(t_philosopher *philosopher)
 
 void	wait_fork(t_philosopher *philosopher)
 {
-	int	fork_available;
-
-	fork_available = 0;
-	while (!fork_available)
+	pthread_mutex_lock(&philosopher->fork_mutex);
+	while (!philosopher->fork_available)
 	{
-		pthread_mutex_lock(&philosopher->fork_mutex);
-		fork_available = philosopher->fork_available;
-		if (fork_available)
-			philosopher->fork_available = 0;
 		pthread_mutex_unlock(&philosopher->fork_mutex);
 		usleep(1);
+		pthread_mutex_lock(&philosopher->fork_mutex);
 	}
+	philosopher->fork_available = 0;
+	pthread_mutex_unlock(&philosopher->fork_mutex);
 }
 
 int	take_fork(t_philosopher *philosopher, t_philosopher *locked)
 {
+	if (must_stop(philosopher->table))
+		return (0);
 	wait_fork(locked->next);
 	if (must_stop(philosopher->table))
-		return (drop_fork(locked), 0);
+		return (drop_fork(locked->next), 0);
 	print_message("has taken a fork", philosopher);
 	if (philosopher->table->settings.philosopher_amount <= 1)
-		return (drop_fork(philosopher), 0);
+		return (drop_fork(locked->next), 0);
 	wait_fork(locked);
 	if (must_stop(philosopher->table))
 		return (drop_fork(locked), drop_fork(locked->next), 0);
@@ -64,15 +63,17 @@ void	*philosopher_task(void *pointer)
 	philo = (t_philosopher *) pointer;
 	if ((philo->philosopher_id % 2) == 0)
 	{
-		philosopher_think(philo);
-		sleep_ms(philo->table->settings.time_to_eat);
+		if (philosopher_think(philo))
+			return (NULL);
+		sleep_ms(philo->table->settings.time_to_eat, philo->table);
 	}
 	while (!must_stop(philo->table))
 	{
 		if (philosopher_eat(philo))
 			return (pointer);
 		philosopher_sleep(philo);
-		philosopher_think(philo);
+		if (philosopher_think(philo))
+			return (pointer);
 	}
 	return (pointer);
 }

@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:43:17 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/21 13:32:22 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 13:53:55 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_roundtable
 
 size_t		ft_atoi(const char *str);
 void		print_message(const char *message, t_philosopher *philosopher);
+void		unsecure_print(const char *message, t_philosopher *philosopher);
 
 int			arguments_is_valids(int argc, char **argv);
 int			init_table(t_roundtable *philo, char **argv);
@@ -82,7 +83,7 @@ int			joining_threads(t_roundtable *table);
 
 void		philosopher_change_state(t_philosopher *philosopher, \
 	const t_state state);
-void		philosopher_think(t_philosopher *philosopher);
+int			philosopher_think(t_philosopher *philosopher);
 void		philosopher_sleep(t_philosopher *philosopher);
 int			philosopher_eat(t_philosopher *philosopher);
 
@@ -92,7 +93,7 @@ int			take_fork(t_philosopher *philosopher, t_philosopher *locked);
 void		philosopher_increment_meal(t_philosopher *philosopher);
 
 void		*philosopher_task(void *ptr);
-int			sleep_ms(useconds_t ms);
+int			sleep_ms(useconds_t ms, t_roundtable *table);
 
 int			must_exit(t_roundtable *table);
 int			has_dead(t_roundtable *table);
