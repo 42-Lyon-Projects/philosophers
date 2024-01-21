@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 16:35:18 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/20 14:35:17 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:30:33 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,27 @@
 
 int must_exit(t_roundtable *table)
 {
-	int must_exit;
-
 	pthread_mutex_lock(&table->end_mutex);
-	must_exit = table->must_end;
-	pthread_mutex_unlock(&table->end_mutex);
-	return (must_exit);
+	if (table->must_end)
+	{
+		return (pthread_mutex_unlock(&table->end_mutex), 1);
+	}
+	return (pthread_mutex_unlock(&table->end_mutex), 0);
 }
 
-int must_kill(t_roundtable *table)
+int has_dead(t_roundtable *table)
 {
-	int must_exit;
-
 	pthread_mutex_lock(&table->dead_mutex);
-	must_exit = table->has_dead;
-	pthread_mutex_unlock(&table->dead_mutex);
-	return (must_exit);
+	if (table->has_dead)
+	{
+		return (pthread_mutex_unlock(&table->dead_mutex), 1);
+	}
+	return (pthread_mutex_unlock(&table->dead_mutex), 0);
 }
 
 int must_stop(t_roundtable *table)
 {
-	return (must_exit(table) || must_kill(table));
+	return (must_exit(table) || has_dead(table));
 }
 
 int	philosopher_must_dead(t_philosopher *philosopher, size_t time_to_die)
@@ -65,10 +65,10 @@ int	kill_philosopher(t_philosopher *philosophers)
 	{
 		if (philosopher_must_dead(tmp, philosophers->table->settings.time_to_die))
 		{
+			print_message("died", tmp);
 			pthread_mutex_lock(&tmp->table->dead_mutex);
 			philosophers->table->has_dead = 1;
 			pthread_mutex_unlock(&tmp->table->dead_mutex);
-			print_message("died", tmp);
 			return (1);
 		}
 		tmp = tmp->next;
@@ -105,7 +105,7 @@ int	philosophers_end_meals(t_roundtable *table)
 			all_philosphers_have_max_meals = 0;
 		tmp = tmp->next;
 	}
-	if (all_philosphers_have_max_meals && !table->must_end)
+	if (all_philosphers_have_max_meals)
 	{
 		pthread_mutex_lock(&table->end_mutex);
 		table->must_end = 1;
@@ -120,11 +120,12 @@ void	*watchdog_task(void *ptr)
 	t_philosopher	*philosopher;
 
 	philosopher = (t_philosopher *)ptr;
-	while (1)
+	while (!kill_philosopher(philosopher))
 	{
-		if (must_exit(philosopher->table) || kill_philosopher(philosopher))
-			break ;
+		if (philosophers_end_meals(philosopher->table) || must_stop(philosopher->table))
+			return (NULL) ;
+		usleep((1));
 	}
-	return (ptr);
+	return (NULL);
 }
 

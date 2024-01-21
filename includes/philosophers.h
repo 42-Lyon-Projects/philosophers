@@ -84,7 +84,7 @@ int		sleep_ms(useconds_t ms);
 
 void	*watchdog_task(void *ptr);
 int		must_exit(t_roundtable *table);
-int		must_kill(t_roundtable *table);
+int		has_dead(t_roundtable *table);
 int		must_stop(t_roundtable *table);
 
 void	destroy_mutexs(char *message, t_roundtable *table);

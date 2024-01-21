@@ -112,7 +112,6 @@ static int init_philosophers(t_roundtable *table)
 			return (1);
 		add_philosopher(&table->philosophers, philosopher);
 	}
-	table->start_timestamp = get_current_time_in_ms();
 	return (0);
 }
 
@@ -123,6 +122,7 @@ int create_threads(t_roundtable *table)
 	pthread_t watchdog_thread;
 	t_philosopher *tmp;
 
+	table->start_timestamp = get_current_time_in_ms();
 	error_code = pthread_create(&watchdog_thread, NULL, &watchdog_task, table->philosophers);
 	if (error_code)
 		return (destroy_mutexs("Error during creation of 'Watchdog' Thread.", table),\
