@@ -6,41 +6,21 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:56:51 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/21 12:28:35 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 12:59:04 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
 #include "philosophers.h"
 
-void philosopher_think(t_philosopher *philosopher)
-{
-	print_message("is thinking", philosopher);
-}
-
-void philosopher_change_state(t_philosopher *philosopher, const t_state state)
-{
-	pthread_mutex_lock(&philosopher->state_mutex);
-	philosopher->state = state;
-	pthread_mutex_unlock(&philosopher->state_mutex);
-}
-
-void drop_fork(t_philosopher *philosopher)
+void	drop_fork(t_philosopher *philosopher)
 {
 	pthread_mutex_lock(&philosopher->fork_mutex);
 	philosopher->next->fork_available = 1;
 	pthread_mutex_unlock(&philosopher->fork_mutex);
 }
 
-void philosopher_sleep(t_philosopher *philosopher)
+void	wait_fork(t_philosopher *philosopher)
 {
-	philosopher_change_state(philosopher, SLEEPING);
-	print_message("is sleeping", philosopher);
-	sleep_ms(philosopher->table->settings.time_to_sleep);
-}
-
-static void wait_fork(t_philosopher *philosopher)
-{
-	int fork_available;
+	int	fork_available;
 
 	fork_available = 0;
 	while (!fork_available)
@@ -54,7 +34,7 @@ static void wait_fork(t_philosopher *philosopher)
 	}
 }
 
-int take_fork(t_philosopher *philosopher, t_philosopher *locked)
+int	take_fork(t_philosopher *philosopher, t_philosopher *locked)
 {
 	wait_fork(locked->next);
 	if (must_stop(philosopher->table))
@@ -69,7 +49,7 @@ int take_fork(t_philosopher *philosopher, t_philosopher *locked)
 	return (1);
 }
 
-void philosopher_increment_meal(t_philosopher *philosopher)
+void	philosopher_increment_meal(t_philosopher *philosopher)
 {
 	pthread_mutex_lock(&philosopher->meal_mutex);
 	philosopher->last_meal_timestamp = get_current_time_in_ms();
@@ -77,22 +57,9 @@ void philosopher_increment_meal(t_philosopher *philosopher)
 	pthread_mutex_unlock(&philosopher->meal_mutex);
 }
 
-int philosopher_eat(t_philosopher *philosopher)
+void	*philosopher_task(void *pointer)
 {
-	if (!take_fork(philosopher, philosopher))
-		return (1);
-	philosopher_change_state(philosopher, EATING);
-	print_message("is eating", philosopher);
-	philosopher_increment_meal(philosopher);
-	sleep_ms(philosopher->table->settings.time_to_eat);
-	drop_fork(philosopher->next);
-	drop_fork(philosopher);
-	return (0);
-}
-
-void *philosopher_task(void *pointer)
-{
-	t_philosopher *philo;
+	t_philosopher	*philo;
 
 	philo = (t_philosopher *) pointer;
 	if ((philo->philosopher_id % 2) == 0)
@@ -102,7 +69,7 @@ void *philosopher_task(void *pointer)
 	}
 	while (!must_stop(philo->table))
 	{
-		if(philosopher_eat(philo))
+		if (philosopher_eat(philo))
 			return (pointer);
 		philosopher_sleep(philo);
 		philosopher_think(philo);

@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 11:32:09 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/20 08:51:38 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/21 13:10:25 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -17,13 +17,15 @@
 /**
  * @brief Gets the current time in milliseconds using gettimeofday.
  *
- * @brief This function retrieves the current time in milliseconds using the gettimeofday function.
+ * @brief This func retrieves the current time in ms.
  * in timeval time.tv_sec represents the number of seconds.
  * in timeval time.tv_usec represents the number of microseconds.
- * So time.tv_sec * 1000 converts seconds to milliseconds and time.tv_usec / 1000 converts microseconds to milliseconds.
+ * So time.tv_sec * 1000 converts seconds to milliseconds and
+ * time.tv_usec / 1000 converts microseconds to milliseconds.
  *
  * Adding these two together gives the total time in milliseconds.
- * So, the expression time.tv_sec * 1000 + time.tv_usec / 1000 calculates the total time in milliseconds, combining seconds and microseconds.
+ * So, the expression time.tv_sec * 1000 + time.tv_usec / 1000
+ * calculates the total time in milliseconds, combining seconds and microseconds.
  * @return The current time in milliseconds.
  */
 useconds_t	get_current_time_in_ms(void)
@@ -54,7 +56,7 @@ int	sleep_ms(useconds_t ms)
 	return (0);
 }
 
-useconds_t time_elapsed_after_start(useconds_t start_timestamp)
+useconds_t	time_elapsed_after_start(useconds_t start_timestamp)
 {
 	return (get_current_time_in_ms() - start_timestamp);
 }
