@@ -61,7 +61,7 @@ void	*philosopher_task(void *pointer)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *) pointer;
-	if ((philo->philosopher_id % 2) == 0)
+	if ((philo->philosopher_id % 2))
 	{
 		if (philosopher_think(philo))
 			return (NULL);

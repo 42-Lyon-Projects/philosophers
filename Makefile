@@ -30,7 +30,6 @@ $(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile ./includes/philosophers.h
 all : $(NAME)
 
 clean :
-	$(RM) $(NAME)
 	rm -rf $(BUILD_DIRECTORY)
 
 fclean : clean
