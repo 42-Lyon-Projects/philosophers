@@ -13,23 +13,19 @@ FILES =	main.c								\
 
 BUILD_DIRECTORY = ./build/
 
-CC = gcc
+CC = cc
 
-FLAGS = -Wall -Wextra -Werror -c -g -fsanitize=thread -fno-omit-frame-pointer
+FLAGS = -Wall -Wextra -Werror -c -g
 
 SOURCES = $(addprefix "sources/", $(SRCS:.c=.o))
 OBJS = $(addprefix $(BUILD_DIRECTORY), $(FILES:.c=.o))
 
-$(NAME): $(BUILD_DIRECTORY) $(OBJS)
-	$(CC) $(OBJS) -fsanitize=thread -fno-omit-frame-pointer -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(OBJS) -lpthread -o $(NAME)
 
 $(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile ./includes/philosophers.h
+	mkdir -p $(BUILD_DIRECTORY)parsing $(BUILD_DIRECTORY)utils $(BUILD_DIRECTORY)tasks
 	$(CC) $(FLAGS) -I ./includes/ $< -o $@
-
-$(BUILD_DIRECTORY):
-	mkdir -p $(BUILD_DIRECTORY)parsing	\
-	$(BUILD_DIRECTORY)utils				\
-	$(BUILD_DIRECTORY)tasks				\
 
 all : $(NAME)
 
@@ -42,4 +38,4 @@ fclean : clean
 
 re : fclean all
 
-.PHONY: all clean fclean re force philo
+.PHONY: all clean fclean re $(BUILD_DIRECTORY)
