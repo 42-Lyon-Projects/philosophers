@@ -15,13 +15,13 @@ BUILD_DIRECTORY = ./build/
 
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror -c -g
+FLAGS = -Wall -Wextra -Werror -c -g -fsanitize=thread -fno-omit-frame-pointer
 
 SOURCES = $(addprefix "sources/", $(SRCS:.c=.o))
 OBJS = $(addprefix $(BUILD_DIRECTORY), $(FILES:.c=.o))
 
 $(NAME): $(BUILD_DIRECTORY) $(OBJS)
-	$(CC) $(OBJS) -o $(NAME)
+	$(CC) $(OBJS) -fsanitize=thread -fno-omit-frame-pointer -o $(NAME)
 
 $(BUILD_DIRECTORY)%.o: ./sources/%.c Makefile ./includes/philosophers.h
 	$(CC) $(FLAGS) -I ./includes/ $< -o $@

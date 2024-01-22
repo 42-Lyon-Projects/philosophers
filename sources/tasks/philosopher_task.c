@@ -14,7 +14,7 @@
 void	drop_fork(t_philosopher *philosopher)
 {
 	pthread_mutex_lock(&philosopher->fork_mutex);
-	philosopher->next->fork_available = 1;
+	philosopher->fork_available = 1;
 	pthread_mutex_unlock(&philosopher->fork_mutex);
 }
 
