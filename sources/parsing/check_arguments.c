@@ -6,7 +6,7 @@
 /*   By: jbadaire <jbadaire@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 00:13:59 by jbadaire          #+#    #+#             */
-/*   Updated: 2024/01/21 12:55:44 by jbadaire         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:06:59 by jbadaire         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <limits.h>
@@ -67,22 +67,22 @@ int	arguments_is_valids(const int argc, char **argv)
 	size_t	philosophers_number;
 
 	if (argc != 5 && argc != 6)
-		return (printf("Error: wrong number of arguments\n"), 0);
+		return (write(2, "Error: wrong number of arguments\n", 34), 0);
 	philosophers_number = ft_atoi(argv[1]);
 	if (!ft_is_numbers(argv[1]) || philosophers_number < 1 || \
 		philosophers_number > MAX_PHILOSOPHERS)
-		return (printf("Wrong Philo amount 1 %d", MAX_PHILOSOPHERS), 0);
+		return (write(2, "Wrong Philo amount 1 - 200\n", 27), 0);
 	if (!ft_is_numbers(argv[2]) || ft_atoi(argv[2]) > INT_MAX || \
 		ft_atoi(argv[2]) < 1)
-		return (printf("Philo ttd must be superior of 60 (ms) !"), 0);
+		return (write(2, "Philo ttd must be superior to 0 (ms) !\n", 39), 0);
 	if (!ft_is_numbers(argv[3]) || ft_atoi(argv[3]) > INT_MAX || \
 		ft_atoi(argv[3]) < 1)
-		return (printf("Philo tte must be superior of 60 (ms) !"), 0);
+		return (write(2, "Philo tte must be superior to 0 (ms) !\n", 39), 0);
 	if (!ft_is_numbers(argv[4]) || ft_atoi(argv[4]) > INT_MAX || \
 		ft_atoi(argv[4]) < 1)
-		return (printf("Philo tts must be superior of 60 (ms)"), 0);
+		return (write(2, "Philo tts must be superior to 0 (ms)\n", 37), 0);
 	if (argc == 6 && (!ft_is_numbers(argv[5]) || \
 		ft_atoi(argv[5]) > INT_MAX || ft_atoi(argv[5]) < 1))
-		return (printf("Philosophers nom must be superior of 0"), 0);
+		return (write(2, "Philosophers nom must be superior to 0\n", 39), 0);
 	return (1);
 }
